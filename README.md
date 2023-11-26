@@ -40,4 +40,8 @@ This project follows clean architecture principles to ensure a separation of con
 
 ## TODOs
 
+- [x] Get pokemon data from Pokedex API
+- [x] Implement home screen
+- [x] Implement detail screen
+- [x] Add search feature both by id and by name
 - [ ] Load to scroll pagination logic in listing pokemons
