@@ -37,3 +37,7 @@ This project follows clean architecture principles to ensure a separation of con
 
 <img src="https://github.com/higuclu/Pokedex/assets/53168447/cdcf7003-b3e0-456d-9a88-d10331d56e4c.png" alt="image" width="25%" height="25%">
 
+
+## TODOs
+
+- [ ] Load to scroll pagination logic in listing pokemons
