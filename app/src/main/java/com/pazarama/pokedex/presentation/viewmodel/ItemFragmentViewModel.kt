@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pazarama.pokedex.domain.model.item.PokemonItem
 import com.pazarama.pokedex.domain.model.item.PokemonItems
 import com.pazarama.pokedex.domain.model.search.SearchType
 import com.pazarama.pokedex.domain.repository.PokemonRepository
@@ -48,6 +47,7 @@ class ItemFragmentViewModel @Inject constructor(
                     pokemonLoading.value = Resource.loading(false)
                     pokemonError.value = Resource.error("", false)
                     pokemonItems.value = resource
+                    pokemonSearchNames.value = resource.data.results.map { it.name }
                 }
             }
         }

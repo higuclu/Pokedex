@@ -2,12 +2,13 @@ package com.pazarama.pokedex.presentation.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.pazarama.pokedex.databinding.FragmentItemBinding
 import com.pazarama.pokedex.domain.model.item.PokemonItem
-import com.pazarama.pokedex.domain.model.item.PokemonItems
 import com.pazarama.pokedex.util.UrlIdExtractor.formatId
+import com.pazarama.pokedex.util.setPokemonImage
 
 class PokemonItemRecyclerViewAdapter(
     private val pokemonItems: ArrayList<PokemonItem>,
@@ -35,6 +36,7 @@ class PokemonItemRecyclerViewAdapter(
         }
         holder.contentView.text = item.name.capitalize()
         holder.idView.text = formatId(item.getId())
+        holder.icon.setPokemonImage(item.geticonUrl())
     }
 
     override fun getItemCount(): Int = pokemonItems.size
@@ -42,6 +44,7 @@ class PokemonItemRecyclerViewAdapter(
     inner class ViewHolder(binding: FragmentItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val idView: TextView = binding.pokemonIdText
         val contentView: TextView = binding.pokemonNameText
+        val icon : ImageView = binding.imageViewPokemonIcon
 
         override fun toString(): String {
             return super.toString() + " '" + contentView.text + "'"

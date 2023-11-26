@@ -10,8 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
@@ -49,11 +49,25 @@ class DetailFragment : Fragment() {
             requireActivity().onBackPressed()
         }
         binding.linearLayoutPrevious.setOnClickListener {
-            //TODO previous pokemon
-            Toast.makeText(requireContext(),"Back Pressed",Toast.LENGTH_SHORT).show()
+            val currentName = viewModel.pokemonDetail.value?.data?.name
+            val previousIndex = viewModel.searchNamesList.value?.indexOf(currentName)?.minus(1)
+            if (previousIndex!! >= 0) {
+                binding.cardviewContainer.movesContainer.root.removeAllViews()
+                binding.cardviewContainer.typesContainer.root.removeAllViews()
+                val nextValue = previousIndex.let { it1 -> viewModel.searchNamesList.value?.get(it1) }
+                viewModel.loadData(nextValue!!)
+            }
         }
         binding.linearLayoutNext.setOnClickListener {
             //viewModel.loadData(args.searchList[1])
+            val currentName = viewModel.pokemonDetail.value?.data?.name
+            val nextIndex = viewModel.searchNamesList.value?.indexOf(currentName)?.plus(1)
+            if (nextIndex!! < viewModel.searchNamesList.value?.size!!) {
+                binding.cardviewContainer.movesContainer.root.removeAllViews()
+                binding.cardviewContainer.typesContainer.root.removeAllViews()
+                val nextValue = nextIndex.let { it1 -> viewModel.searchNamesList.value?.get(it1) }
+                viewModel.loadData(nextValue!!)
+            }
         }
         viewModel.loadData(args.name)
 
@@ -68,7 +82,7 @@ class DetailFragment : Fragment() {
 
     private fun observeLiveData() {
         viewModel.pokemonDetail.observe(viewLifecycleOwner) { pokemonDetail ->
-            binding.imageViewPokemon.setPokemonImage(pokemonDetail.data?.sprite?.sprite)
+            binding.imageViewPokemon.setPokemonImage(pokemonDetail.data?.sprite?.other?.officialArtwork?.frontDefault)
             binding.toolbarContainer.titleTextView.text =
                 pokemonDetail.data?.name?.capitalize(Locale.getDefault())
             binding.toolbarContainer.subtitleTextView.text =
@@ -81,6 +95,23 @@ class DetailFragment : Fragment() {
             binding.cardviewContainer.textViewHeightData.text = getString(R.string.height_format, pokemonDetail.data?.height?.toDouble()?.div(10).toString())
             pokemonDetail.data?.moves?.let { appendMovesToTextviewContainer(it) }
             fillStats(pokemonDetail.data?.stats)
+            viewModel.processSearchResults(args.searchList)
+
+            val size = viewModel.searchNamesList.value?.size
+
+            val currentIndex = viewModel.searchNamesList.value?.indexOf(pokemonDetail.data?.name)
+
+            if (currentIndex == size?.minus(1)) {
+                binding.linearLayoutNext.visibility = View.GONE
+            } else {
+                binding.linearLayoutNext.visibility = View.VISIBLE
+            }
+
+            if (currentIndex == 0) {
+                binding.linearLayoutPrevious.visibility = View.GONE
+            } else {
+                binding.linearLayoutPrevious.visibility = View.VISIBLE
+            }
         }
 
         viewModel.pokemonLoading.observe(viewLifecycleOwner){ loading ->
@@ -173,6 +204,7 @@ class DetailFragment : Fragment() {
             )
             params.marginEnd = resources.getDimension(R.dimen.text_margin).toInt()
             textView.layoutParams = params
+            textView.setPadding(4 * resources.displayMetrics.density.toInt())
             textView.gravity = Gravity.CENTER_VERTICAL or Gravity.CENTER_HORIZONTAL
             textView.background = updateShapeBackgroundColor(type)
             textView.setTextColor(resources.getColor(R.color.white))

@@ -1,6 +1,5 @@
 package com.pazarama.pokedex.presentation.viewmodel
 
-import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,8 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.pazarama.pokedex.R
 import com.pazarama.pokedex.domain.model.detail.PokemonDetail
 import com.pazarama.pokedex.domain.model.detail.Type
-import com.pazarama.pokedex.domain.model.item.PokemonItems
-import com.pazarama.pokedex.domain.model.search.SearchType
 import com.pazarama.pokedex.domain.repository.PokemonRepository
 import com.pazarama.pokedex.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,10 +24,10 @@ class DetailFragmentViewModel @Inject constructor(private val pokemonRepository:
     val pokemonError = MutableLiveData<Resource<Boolean>>()
     val pokemonLoading = MutableLiveData<Resource<Boolean>>()
 
-    val _searchNamesList = MutableLiveData<String>()
-//    var searchType: LiveData<String>
-//        get() = searchNamesList
-//        set(value)
+    private val _searchNamesList = MutableLiveData<List<String>>()
+
+    val searchNamesList: LiveData<List<String>>
+        get() = _searchNamesList
 
     val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
         println(throwable.localizedMessage)
@@ -79,6 +76,6 @@ class DetailFragmentViewModel @Inject constructor(private val pokemonRepository:
         val resultNames = searchNames
             .removeSurrounding("[", "]")
             .split(", ")
-        //_searchNamesList.value = resultNames
+        _searchNamesList.value = resultNames
     }
 }
