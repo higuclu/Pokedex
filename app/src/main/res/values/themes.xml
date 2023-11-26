@@ -4,6 +4,15 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
+    <!-- SearchView theme design -->
+    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name="android:background">@drawable/background_searchview</item>
+        <item name="searchIcon">@color/primary_color</item>
+        <item name="android:colorControlNormal">@android:color/black</item>
+        <item name="android:colorControlActivated">@android:color/black</item>
+        <item name="submitBackground">@android:color/black</item>
+    </style>
+
 
     <style name="Theme.Pokedex" parent="Base.Theme.Pokedex" />
 </resources>
